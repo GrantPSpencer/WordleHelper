@@ -1,0 +1,72 @@
+package wordlehelper;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.HashMap;
+import java.util.Map;
+
+public class Simulator {
+    
+    public static void main(String[] args) throws IOException {
+    
+        String[] list = WordList.list;
+        int length = WordList.list.length;
+
+        // HashMap<String, Double> averageBitsMap = new HashMap<>();
+        FileWriter writer = new FileWriter("src/main/java/wordlehelper/data.txt");
+        for (int i = 0; i < length; i++) {
+            double sum = 0;
+            for (int j = 0; j < length; j++) {
+                if (i == j) {
+                    continue;
+                }
+                SimpleGame game = new SimpleGame(list[j]);
+                sum += game.getBits(list[i]);
+            }
+            // System.out.println(WordList.list[i] + " has average bits of " + sum/4);
+            // averageBitsMap.put(list[i], sum/(length-1));
+            StringBuilder strBuilder = new StringBuilder();
+            strBuilder.append(list[i]).append(",").append(sum/(length-1)).append("\n");
+            writer.write(strBuilder.toString());
+            System.out.print('\r'+"Progress: " + i + " / " + length);
+            
+        }
+
+        writer.flush();
+        writer.close();
+
+           
+
+        // read files, test if delimiting works  
+        // try {
+        //     FileReader reader = new FileReader("src/main/java/wordlehelper/data.txt");
+        //     BufferedReader bufferedReader = new BufferedReader(reader);
+        //     String line = bufferedReader.readLine();
+        //     while (line != null) {
+        //         System.out.println(line);
+        //         line = bufferedReader.readLine();
+        //     }
+        // } catch (IOException e) {
+        //     // TODO Auto-generated catch block
+        //     e.printStackTrace();
+        // }
+
+        
+
+        // try {
+        //     System.out.println("attempting to write");
+        //     writer2.write("hello world2\n");
+        //     writer2.flush();
+        //     writer2.close();
+        // } catch (IOException e) {
+        //     // TODO Auto-generated catch block
+        //     e.printStackTrace();
+        // }
+        
+    }
+    
+}
