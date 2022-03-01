@@ -13,11 +13,11 @@ public class Simulator {
     
     public static void main(String[] args) throws IOException {
     
-        String[] list = WordList.list;
-        int length = WordList.list.length;
+        String[] list = WordList.guessList;
+        int length = WordList.guessList.length;
 
         // HashMap<String, Double> averageBitsMap = new HashMap<>();
-        FileWriter writer = new FileWriter("src/main/java/wordlehelper/data.txt");
+        FileWriter writer = new FileWriter("src/main/java/wordlehelper/data2.txt");
         for (int i = 0; i < length; i++) {
             double sum = 0;
             for (int j = 0; j < length; j++) {
@@ -25,10 +25,10 @@ public class Simulator {
                     continue;
                 }
                 SimpleGame game = new SimpleGame(list[j]);
-                sum += game.getBits(list[i]);
+                sum += game.getBits(list[i], list);
+                
             }
             // System.out.println(WordList.list[i] + " has average bits of " + sum/4);
-            // averageBitsMap.put(list[i], sum/(length-1));
             StringBuilder strBuilder = new StringBuilder();
             strBuilder.append(list[i]).append(",").append(sum/(length-1)).append("\n");
             writer.write(strBuilder.toString());
@@ -70,3 +70,5 @@ public class Simulator {
     }
     
 }
+
+
