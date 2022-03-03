@@ -1,9 +1,11 @@
 package wordlehelper;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
@@ -12,15 +14,21 @@ public class Game {
     String answer;
     private final int LENGTH = 5;
     public int remainingGuesses;
-    private String[] possibleWords;
+    public LinkedList<String> possibleWords;
 
     public Game(String answer) {
         this.answer = answer;
         remainingGuesses = 5;
+        try {
+            WordList.getWords();
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         possibleWords = WordList.guessList;
     }
 
-    public String[] filterByGuess(String[] list, String guess) {
+    public LinkedList<String> filterByGuess(LinkedList<String> list, String guess) {
 
         HashMap<Integer, Character> green = new HashMap<>();
         // HashMap<Integer, Character> yellow = new HashMap<>();
@@ -29,7 +37,7 @@ public class Game {
         
         int[] responses = judgeGuess(guess);
 
-        ArrayList<String> newList = new ArrayList<>();
+        LinkedList<String> newList = new LinkedList<>();
 
         for (String possibleWord : list) {
             if (isPossibleWord(possibleWord, guess, responses)) {
@@ -38,7 +46,7 @@ public class Game {
         }
 
 
-        return newList.toArray(new String[newList.size()]);
+        return newList;
 
 
     }
@@ -154,53 +162,54 @@ public class Game {
         return response;
     }
 
-    public double getBits(String guess) {
-        String[] newList = this.filterByGuess(WordList.guessList, guess);
+    // public double getBits(String guess) {
+    //     LinkedList<String> newList = this.filterByGuess(WordList.guessList, guess);
         
-        double probability = ((double) newList.length) / ((double) WordList.answerList.length);
-        double bits = Math.log(1/probability) / Math.log(2);
-        if (bits > 100) {
-            System.out.println("size is " + newList.length);
-            System.out.println(bits + " at " + guess + " " + this.answer);
-        }
-        return bits;
-    }
+    //     double probability = ((double) newList.size()) / ((double) WordList.guessList.size());
+    //     double bits = Math.log(1/probability) / Math.log(2);
+    //     if (bits > 100) {
+    //         System.out.println("size is " + newList.size());
+    //         System.out.println(bits + " at " + guess + " " + this.answer);
+    //     }
+    //     return bits;
+    // }
 
     public boolean guess(String guess) {
-        System.out.println("\nGuessed: " + guess);
-        if (remainingGuesses <= 0) {
-            System.out.println("Game already over");
-            return false;
-        }
+        // System.out.println("\nGuessed: " + guess);
+        // if (remainingGuesses <= 0) {
+        //     // System.out.println("Game already over");
+        //     return false;
+        // }
         remainingGuesses--;
         if (guess.equals(this.answer)) {
             return true;
         }
-        String[] newList = filterByGuess(this.possibleWords, guess);
+        LinkedList<String> newList = filterByGuess(this.possibleWords, guess);
         
-        double probability = ((double) newList.length) / ((double) this.possibleWords.length);
+        double probability = ((double) newList.size()) / ((double) this.possibleWords.size());
         double bits = Math.log(1/probability) / Math.log(2);
 
-        System.out.println("Bits gained: " + bits);
+        // System.out.println("Bits gained: " + bits);
 
         this.possibleWords = newList;
-        if (this.possibleWords.length > 5) {
-            System.out.println(this.possibleWords.length + " possible words left");
-        } else {
-            System.out.print("Possible Words: ");
-            for (String word : this.possibleWords) {
-                System.out.print(word + ", ");
-            }
-            System.out.print("\n");
-        }
+        // if (this.possibleWords.size() > 5) {
+        //     System.out.println(this.possibleWords.size() + " possible words left");
+        // } 
+        // else {
+        //     System.out.print("Possible Words: ");
+        //     for (String word : this.possibleWords) {
+        //         System.out.print(word + ", ");
+        //     }
+        //     System.out.print("\n");
+        // }
         return false;
     }
 
 
     public static void main(String[] args) {
-        Game game = new Game("awake");
+        Game game = new Game("parer");
 
-        Scanner input = new Scanner(System.in);
+        // Scanner input = new Scanner(System.in);
         // while (game.remainingGuesses > 0) {
         //     System.out.println("Please guess a word");
         //     String inputString = input.nextLine();
@@ -209,18 +218,18 @@ public class Game {
         game.guess("raise");
         boolean gameWon = false;
         HashMap<String, Double> avgScoreMap = new HashMap<>();
-        while (gameWon == false && game.remainingGuesses > 0) {
+        while (gameWon == false) {
             avgScoreMap.clear();
-            for (int i = 0; i < game.possibleWords.length; i++) {
+            for (int i = 0; i < game.possibleWords.size(); i++) {
                 double sum = 0;
-                for (int j = 0; j < game.possibleWords.length; j++) {
+                for (int j = 0; j < game.possibleWords.size(); j++) {
                     if (i == j) {
                         continue;
                     }
-                    SimpleGame simpleGame = new SimpleGame(game.possibleWords[j]);
-                    sum += simpleGame.getBits(game.possibleWords[i], game.possibleWords);
+                    SimpleGame simpleGame = new SimpleGame(game.possibleWords.get(j));
+                    sum += simpleGame.getBits(game.possibleWords.get(i), game.possibleWords);
                 }
-                avgScoreMap.put(game.possibleWords[i], sum/4);
+                avgScoreMap.put(game.possibleWords.get(i), sum/4);
             }
 
             // System.out.println(avgScoreMap.size());
@@ -249,3 +258,8 @@ public class Game {
 
     }
 }
+
+//"agent": 5.331242e-05
+// "ahead": 5.2857239999999995e-05,
+
+

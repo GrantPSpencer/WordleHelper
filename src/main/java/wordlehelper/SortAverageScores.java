@@ -6,7 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class AverageScores {
+public class SortAverageScores {
     public static void main(String[] args) throws IOException {
     
         FileWriter writer = new FileWriter("src/main/java/wordlehelper/data3.txt");

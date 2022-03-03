@@ -7,30 +7,34 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 public class Simulator {
     
     public static void main(String[] args) throws IOException {
+
+        WordList.getWords();
     
-        String[] list = WordList.guessList;
-        int length = WordList.guessList.length;
+        LinkedList<String> guessList = WordList.guessList;
+        String[] answerList = WordList.answerList;
+        int length = WordList.guessList.size();
 
         // HashMap<String, Double> averageBitsMap = new HashMap<>();
-        FileWriter writer = new FileWriter("src/main/java/wordlehelper/data2.txt");
-        for (int i = 0; i < length; i++) {
+        FileWriter writer = new FileWriter("src/main/java/wordlehelper/averagescores.txt");
+        for (int i = 0; i < guessList.size(); i++) {
             double sum = 0;
-            for (int j = 0; j < length; j++) {
+            for (int j = 0; j < answerList.length; j++) {
                 if (i == j) {
                     continue;
                 }
-                SimpleGame game = new SimpleGame(list[j]);
-                sum += game.getBits(list[i], list);
+                SimpleGame simpleGame = new SimpleGame(answerList[j]);
+                sum += simpleGame.getBits(guessList.get(i), guessList);
                 
             }
             // System.out.println(WordList.list[i] + " has average bits of " + sum/4);
             StringBuilder strBuilder = new StringBuilder();
-            strBuilder.append(list[i]).append(",").append(sum/(length-1)).append("\n");
+            strBuilder.append(guessList.get(i)).append(",").append(sum/(length-1)).append("\n");
             writer.write(strBuilder.toString());
             System.out.print('\r'+"Progress: " + i + " / " + length);
             

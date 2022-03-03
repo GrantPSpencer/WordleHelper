@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -19,7 +20,7 @@ public class SimpleGame
         this.answer = answer;
     }
 
-    public ArrayList<String> filterByGuess(String[] list, String guess) {
+    public LinkedList<String> filterByGuess(LinkedList<String> list, String guess) {
 
         HashMap<Integer, Character> green = new HashMap<>();
         // HashMap<Integer, Character> yellow = new HashMap<>();
@@ -28,7 +29,7 @@ public class SimpleGame
         
         int[] responses = judgeGuess(guess);
 
-        ArrayList<String> newList = new ArrayList<>();
+        LinkedList<String> newList = new LinkedList<>();
 
         for (String possibleWord : list) {
             if (isPossibleWord(possibleWord, guess, responses)) {
@@ -153,10 +154,10 @@ public class SimpleGame
         return response;
     }
 
-    public double getBits(String guess, String[] possibleWordsList) {
-        ArrayList<String> newList = this.filterByGuess(possibleWordsList, guess);
+    public double getBits(String guess, LinkedList<String> possibleWordsList) {
+       LinkedList<String> newList = this.filterByGuess(possibleWordsList, guess);
         
-        double probability = ((double) newList.size()) / ((double) possibleWordsList.length);
+        double probability = ((double) newList.size()) / ((double) possibleWordsList.size());
         double bits = Math.log(1/probability) / Math.log(2);
         // if (bits > 100) {
         //     System.out.println("size is " + newList.size());
@@ -172,14 +173,14 @@ public class SimpleGame
         String guess = "awake";
         String answer = "cigar";
         SimpleGame game = new SimpleGame(answer);
-        ArrayList<String> newList = game.filterByGuess(WordList.guessList, guess);
+        LinkedList<String> newList = game.filterByGuess(WordList.guessList, guess);
         for (String str : newList) {
             System.out.println("list here");
             System.out.println(str);
         }
 
         
-        double probability = ((double) newList.size()) / ((double) WordList.guessList.length);
+        double probability = ((double) newList.size()) / ((double) WordList.guessList.size());
 
         // System.out.println(probability);
         // double bits = Math.log(1/probability) / Math.log(2);
