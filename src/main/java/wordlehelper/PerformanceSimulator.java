@@ -12,7 +12,7 @@ public class PerformanceSimulator {
     public int playGame(Game game) {
         boolean gameWon = game.guess("raise");
         HashMap<String, Double> avgScoreMap = new HashMap<>();
-        int guessCount = 0;
+        int guessCount = 1;
         while (gameWon == false) {
             // rank the possible guesses
             avgScoreMap.clear();
@@ -49,21 +49,32 @@ public class PerformanceSimulator {
     public static void main(String[] args) throws IOException {
         // iterate over all possible answers, create game of each, and then play it, and record score
 
-        int count = 0;
+        int sum = 0;
+        HashMap<Integer, Integer> scoreMap = new HashMap<>();
         PerformanceSimulator sim = new PerformanceSimulator();
         for (int i = 0; i < WordList.answerList.length; i++) {
             
             Game game = new Game(WordList.answerList[i]);
-            count += sim.playGame(game);
-            System.out.println("Current Word: " + WordList.answerList[i+1] + " / Average Score: " + 
-            (double)count/(double)(i+1) + " / Progress: " + (i+1) + "/" + WordList.answerList.length);
+            int toAdd = sim.playGame(game);
+            sum += toAdd;
+            scoreMap.put(toAdd, scoreMap.getOrDefault(toAdd, 0)+1);
+            System.out.println("Current Word: " + WordList.answerList[i] + " / Average Score: " + 
+            (double)sum/(double)(i+1) + " / Progress: " + (i+1) + "/" + WordList.answerList.length);
+            if (toAdd == 10) {
+                System.out.println(WordList.answerList[i]);
+                break;
+            }
         }
-        System.out.println("Average performance is: " + ((double)count / (double)WordList.answerList.length));
+        System.out.println("Average performance is: " + ((double)sum / (double)WordList.answerList.length));
         File file = new File("src/main/java/performance_sim_results.txt");
         FileWriter writer = new FileWriter(file);
-        writer.write("Count is: " + count + "\n");
+        writer.write("Sum is: " + sum + "\n");
         writer.write("Length is: " + WordList.answerList.length + "\n");
-        writer.write("Average performance is: " + ((double)count / (double)WordList.answerList.length)+"\n");
+        writer.write("Average performance is: " + ((double)sum / (double)WordList.answerList.length)+"\n");
+        writer.write("Score Distribution is: \n");
+        for (Map.Entry entry : scoreMap.entrySet()) {
+            writer.write(entry.getKey() + ": " + entry.getValue() + "\n");
+        }
         writer.flush();
         writer.close();
         

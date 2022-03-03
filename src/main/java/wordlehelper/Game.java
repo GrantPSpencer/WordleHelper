@@ -207,7 +207,7 @@ public class Game {
 
 
     public static void main(String[] args) {
-        Game game = new Game("parer");
+        Game game = new Game("stare");
 
         // Scanner input = new Scanner(System.in);
         // while (game.remainingGuesses > 0) {
@@ -215,8 +215,7 @@ public class Game {
         //     String inputString = input.nextLine();
         //     game.guess(inputString);
         // }
-        game.guess("raise");
-        boolean gameWon = false;
+        boolean gameWon = game.guess("raise");
         HashMap<String, Double> avgScoreMap = new HashMap<>();
         while (gameWon == false) {
             avgScoreMap.clear();
@@ -246,7 +245,14 @@ public class Game {
             gameWon = game.guess(maxString);
         }
         if (gameWon) {
-            System.out.println("Game won in " + (5 - game.remainingGuesses) + " guess(es)");
+            
+            if (game.remainingGuesses == 4) {
+                System.out.println("Game won in " + (5 - game.remainingGuesses) + " guess");
+            } else {
+                System.out.println("Game won in " + (5 - game.remainingGuesses) + " guesses");
+            }
+
+                
         } else {
             System.out.println("Game lost");
         }
