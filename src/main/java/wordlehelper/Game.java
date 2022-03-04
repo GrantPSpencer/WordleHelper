@@ -175,7 +175,7 @@ public class Game {
     // }
 
     public boolean guess(String guess) {
-        // System.out.println("\nGuessed: " + guess);
+        System.out.println("\nGuessed: " + guess);
         // if (remainingGuesses <= 0) {
         //     // System.out.println("Game already over");
         //     return false;
@@ -192,22 +192,22 @@ public class Game {
         // System.out.println("Bits gained: " + bits);
 
         this.possibleWords = newList;
-        // if (this.possibleWords.size() > 5) {
-        //     System.out.println(this.possibleWords.size() + " possible words left");
-        // } 
-        // else {
-        //     System.out.print("Possible Words: ");
-        //     for (String word : this.possibleWords) {
-        //         System.out.print(word + ", ");
-        //     }
-        //     System.out.print("\n");
-        // }
+        if (this.possibleWords.size() > 5) {
+            System.out.println(this.possibleWords.size() + " possible words left");
+        } 
+        else {
+            System.out.print("Possible Words: ");
+            for (String word : this.possibleWords) {
+                System.out.print(word + ", ");
+            }
+            System.out.print("\n");
+        }
         return false;
     }
 
 
     public static void main(String[] args) {
-        Game game = new Game("stare");
+        Game game = new Game("merry");
 
         // Scanner input = new Scanner(System.in);
         // while (game.remainingGuesses > 0) {

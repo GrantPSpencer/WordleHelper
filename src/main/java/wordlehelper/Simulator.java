@@ -25,7 +25,7 @@ public class Simulator {
         for (int i = 0; i < guessList.size(); i++) {
             double sum = 0;
             for (int j = 0; j < answerList.length; j++) {
-                if (i == j) {
+                if (guessList.get(i) == answerList[j]) {
                     continue;
                 }
                 SimpleGame simpleGame = new SimpleGame(answerList[j]);
