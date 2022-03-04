@@ -13,6 +13,7 @@ Progress so far:
 Upcoming
 - Improve guessing algorithm
      - Currently it solely prioritizes information and does not take into account the probability of winning the game
+     - It also does not consider words that could not be the answer (a guess that could not be the answer could still give more information)
 - Compare user's guess to best expected guess to allow for analysis of a player's game
 
 Current Algorithm's Performance:
