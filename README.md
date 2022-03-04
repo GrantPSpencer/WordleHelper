@@ -19,6 +19,8 @@ Current Algorithm's Performance:
 ![Sim Performance Chart](https://user-images.githubusercontent.com/80296166/156674090-5b1b8f73-d000-4368-a28d-6a097994fb7d.png)
 
 Example Performance on the word "humph":
+</br>
 <img width="290" alt="Screen Shot 2022-03-03 at 3 36 21 PM" src="https://user-images.githubusercontent.com/80296166/156674188-91dde57d-8c2c-4384-919c-34f22907a4ed.png">
+</br>
 
 
