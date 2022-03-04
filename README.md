@@ -1,6 +1,6 @@
 # wordlehelper
  
-Building a program that helps you analyze your wordle performance. Currently working
+Building a program that helps you analyze your wordle performance. Uses information theory to determine the best word to guess. 
 
 Progress so far:
 - Remade game in Java (no gui)
