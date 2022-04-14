@@ -10,15 +10,16 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
+import WordleHelper2.WordList;
+
 public class Simulator {
     
     public static void main(String[] args) throws IOException {
 
-        WordList.getWords();
     
-        LinkedList<String> guessList = WordList.guessList;
+        LinkedList<String> guessList = WordList.guessList();
         String[] answerList = WordList.answerList;
-        int length = WordList.guessList.size();
+        int length = WordList.guessList().size();
 
         // HashMap<String, Double> averageBitsMap = new HashMap<>();
         FileWriter writer = new FileWriter("src/main/java/wordlehelper/averagescores.txt");

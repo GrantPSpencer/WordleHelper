@@ -1,5 +1,6 @@
 package wordlehelper;
 
+import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.ArrayList;
@@ -9,6 +10,8 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Scanner;
+
+import WordleHelper2.WordList;
 
 public class SimpleGame 
 {
@@ -167,20 +170,20 @@ public class SimpleGame
     }
 
     
-    public static void main( String[] args )
+    public static void main( String[] args ) throws FileNotFoundException
     {
 
         String guess = "awake";
         String answer = "cigar";
         SimpleGame game = new SimpleGame(answer);
-        LinkedList<String> newList = game.filterByGuess(WordList.guessList, guess);
+        LinkedList<String> newList = game.filterByGuess(WordList.guessList(), guess);
         for (String str : newList) {
             System.out.println("list here");
             System.out.println(str);
         }
 
         
-        double probability = ((double) newList.size()) / ((double) WordList.guessList.size());
+        double probability = ((double) newList.size()) / ((double) WordList.guessList().size());
 
         // System.out.println(probability);
         // double bits = Math.log(1/probability) / Math.log(2);

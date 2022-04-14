@@ -12,13 +12,14 @@ import java.util.Set;
 
 import WordleHelper2.WordList;
 
-public class Game {
+public class Game2 {
     String answer;
     private final int LENGTH = 5;
     public int remainingGuesses;
     public LinkedList<String> possibleWords;
+    public LinkedList<String> unusedWords;
 
-    public Game(String answer) {
+    public Game2(String answer) throws FileNotFoundException {
         this.answer = answer;
         remainingGuesses = 5;
         try {
@@ -27,12 +28,8 @@ public class Game {
             e.printStackTrace();
         }
 
-        try {
-            possibleWords = WordList.guessList();
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        possibleWords = WordList.guessList();
+        unusedWords = WordList.guessList();
     }
 
     public LinkedList<String> filterByGuess(LinkedList<String> list, String guess) {
@@ -50,7 +47,11 @@ public class Game {
                 newList.add(possibleWord);
             }
         }
+
+
         return newList;
+
+
     }
 
 
@@ -161,7 +162,7 @@ public class Game {
     // }
 
     public boolean guess(String guess) {
-        // System.out.println("\nGuessed: " + guess);
+        System.out.println("\nGuessed: " + guess);
         // if (remainingGuesses <= 0) {
         //     // System.out.println("Game already over");
         //     return false;
@@ -178,78 +179,86 @@ public class Game {
         // System.out.println("Bits gained: " + bits);
 
         this.possibleWords = newList;
-        // if (this.possibleWords.size() > 5) {
-        //     System.out.println(this.possibleWords.size() + " possible words left");
-        // } 
-        // else {
-        //     System.out.print("Possible Words: ");
-        //     for (String word : this.possibleWords) {
-        //         System.out.print(word + ", ");
-        //     }
-        //     System.out.print("\n");
-        // }
+        this.unusedWords.remove(guess);
+        if (this.possibleWords.size() > 5) {
+            System.out.println(this.possibleWords.size() + " possible words left");
+        } 
+        else {
+            System.out.print("Possible Words: ");
+            for (String word : this.possibleWords) {
+                System.out.print(word + ", ");
+            }
+            System.out.print("\n");
+        }
         return false;
     }
 
 
-    public static void main(String[] args) {
-        System.out.println("word is: abaca");
-        Game game = new Game("abaca");
+    public static void main(String[] args) throws FileNotFoundException {
+        Game2 game2 = new Game2("humph");
 
         // Scanner input = new Scanner(System.in);
-        // while (game.remainingGuesses > 0) {
+        // while (game2.remainingGuesses > 0) {
         //     System.out.println("Please guess a word");
         //     String inputString = input.nextLine();
-        //     game.guess(inputString);
+        //     game2.guess(inputString);
         // }
-        boolean gameWon = game.guess("xaxax");
+        boolean gameWon = game2.guess("stare");
 
-        Scanner scanner = new Scanner(System.in);
-        String line = scanner.nextLine();
-        while (line != null) {
-            game.guess(line);
-            line = scanner.nextLine();
-        }
+        // Scanner scanner = new Scanner(System.in);
+        // String line = scanner.nextLine();
+        // while (line != null) {
+        //     game2.guess(line);
+        //     line = scanner.nextLine();
+        // }
         HashMap<String, Double> avgScoreMap = new HashMap<>();
-        // while (gameWon == false) {
-        //     avgScoreMap.clear();
-        //     for (int i = 0; i < game.possibleWords.size(); i++) {
-        //         double sum = 0;
-        //         for (int j = 0; j < game.possibleWords.size(); j++) {
-        //             if (i == j) {
-        //                 continue;
-        //             }
-        //             SimpleGame simpleGame = new SimpleGame(game.possibleWords.get(j));
-        //             sum += simpleGame.getBits(game.possibleWords.get(i), game.possibleWords);
-        //         }
-        //         avgScoreMap.put(game.possibleWords.get(i), sum/4);
-        //     }
+        while (gameWon == false) {
+            avgScoreMap.clear();
+            for (int i = 0; i < game2.unusedWords.size(); i++) {
+                double sum = 0;
+                for (int j = 0; j < game2.possibleWords.size(); j++) {
+                    if (game2.unusedWords.get(i) == game2.possibleWords.get(j)) {
+                         continue;
+                    }
+                    SimpleGame simpleGame = new SimpleGame(game2.possibleWords.get(j));
+                    sum += simpleGame.getBits(game2.unusedWords.get(i), game2.possibleWords);
+                }
+                avgScoreMap.put(game2.unusedWords.get(i), sum/4);
+                System.out.print('\r' +""+i + "/" + game2.unusedWords.size());
+            }
 
-        //     // System.out.println(avgScoreMap.size());
-        //     Double max = -Double.MAX_VALUE;
-        //     String maxString = "";
-        //     for (Map.Entry entry : avgScoreMap.entrySet()) {
-        //         if (max < (Double) entry.getValue()) {
-        //             max = (Double) entry.getValue();
-        //             maxString = (String) entry.getKey();
-        //         }
-        //     }
+            // System.out.println(avgScoreMap.size());
+            Double max = -Double.MAX_VALUE;
+            String maxString = "";
+            for (Map.Entry entry : avgScoreMap.entrySet()) {
+                Double newScore;
+                if (game2.possibleWords.contains(entry.getKey())) {
+                    newScore = (Double)entry.getValue() + (1/game2.possibleWords.size());
+                } else {
+                    newScore = (Double) entry.getValue();
+                }
+                if (max < newScore) {
+                    max = newScore;
+                    maxString = (String) entry.getKey();
+                }
+            }
 
-        //     // System.out.println("Expected bits: " + max); 
-        //     gameWon = game.guess(maxString);
-        // }
-        // if (gameWon) {
+
+            // System.out.println("Expected bits: " + max); 
+            gameWon = game2.guess(maxString);
+        }
+        if (gameWon) {
             
-        //     if (game.remainingGuesses == 4) {
-        //         System.out.println("Game won in " + (5 - game.remainingGuesses) + " guess");
-        //     } else {
-        //         System.out.println("Game won in " + (5 - game.remainingGuesses) + " guesses");
-        //     }
+            if (game2.remainingGuesses == 4) {
+                System.out.println("Game won in " + (5 - game2.remainingGuesses) + " guess");
+            } else {
+                System.out.println("Game won in " + (5 - game2.remainingGuesses) + " guesses");
+            }
 
                 
-        // } else {
-        //     System.out.println("Game lost");
-        // }
+        } else {
+            System.out.println("Game lost");
+        }
         
 
             
@@ -258,4 +267,3 @@ public class Game {
 
     }
 }
-

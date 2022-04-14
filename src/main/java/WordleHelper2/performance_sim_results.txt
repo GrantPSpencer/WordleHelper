@@ -1,0 +1,11 @@
+Sum is: 10170
+Length is: 2309
+Average performance is: 4.40450411433521
+Score Distribution is: 
+1: 1
+2: 61
+3: 474
+4: 789
+5: 576
+6: 267
+7: 141

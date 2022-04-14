@@ -9,40 +9,46 @@ import java.util.Map;
 
 import WordleHelper2.WordList;
 
-public class PerformanceSimulator {
+public class PerformanceSimulator2 {
 
-    public int playGame(Game game) {
-        boolean gameWon = game.guess("raise");
+    public int playGame(Game2 game2) {
+        boolean gameWon = game2.guess("raise");
         HashMap<String, Double> avgScoreMap = new HashMap<>();
         int guessCount = 1;
         while (gameWon == false) {
-            // rank the possible guesses
             avgScoreMap.clear();
-            for (int i = 0; i < game.possibleWords.size(); i++) {
+            for (int i = 0; i < game2.unusedWords.size(); i++) {
                 double sum = 0;
-                for (int j = 0; j < game.possibleWords.size(); j++) {
-                    if (i == j) {
-                        continue;
+                for (int j = 0; j < game2.possibleWords.size(); j++) {
+                    if (game2.unusedWords.get(i) == game2.possibleWords.get(j)) {
+                         continue;
                     }
-                    SimpleGame simpleGame = new SimpleGame(game.possibleWords.get(j));
-                    sum += simpleGame.getBits(game.possibleWords.get(i), game.possibleWords);
+                    SimpleGame simpleGame = new SimpleGame(game2.possibleWords.get(j));
+                    sum += simpleGame.getBits(game2.unusedWords.get(i), game2.possibleWords);
                 }
-                avgScoreMap.put(game.possibleWords.get(i), sum/4);
+                avgScoreMap.put(game2.unusedWords.get(i), sum/4);
+                System.out.print('\r' +""+i + "/" + game2.unusedWords.size());
             }
 
-            
-            //choose best guess
+            // System.out.println(avgScoreMap.size());
             Double max = -Double.MAX_VALUE;
             String maxString = "";
             for (Map.Entry entry : avgScoreMap.entrySet()) {
-                if (max < (Double) entry.getValue()) {
-                    max = (Double) entry.getValue();
+                Double newScore;
+                if (game2.possibleWords.contains(entry.getKey())) {
+                    newScore = (Double)entry.getValue() + (1/game2.possibleWords.size())*4;
+                } else {
+                    newScore = (Double) entry.getValue();
+                }
+                if (max < newScore) {
+                    max = newScore;
                     maxString = (String) entry.getKey();
                 }
             }
-            
-            // guess
-            gameWon = game.guess(maxString);
+
+
+            // System.out.println("Expected bits: " + max); 
+            gameWon = game2.guess(maxString);
             ++guessCount;
         }
         return guessCount;
@@ -53,11 +59,11 @@ public class PerformanceSimulator {
 
         int sum = 0;
         HashMap<Integer, Integer> scoreMap = new HashMap<>();
-        PerformanceSimulator sim = new PerformanceSimulator();
+        PerformanceSimulator2 sim = new PerformanceSimulator2();
         for (int i = 0; i < WordList.answerList.length; i++) {
             
-            Game game = new Game(WordList.answerList[i]);
-            int toAdd = sim.playGame(game);
+            Game2 game2 = new Game2(WordList.answerList[i]);
+            int toAdd = sim.playGame(game2);
             sum += toAdd;
             scoreMap.put(toAdd, scoreMap.getOrDefault(toAdd, 0)+1);
             System.out.println("Current Word: " + WordList.answerList[i] + " / Average Score: " + 

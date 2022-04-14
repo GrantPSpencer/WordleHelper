@@ -23,12 +23,12 @@ public class testList {
     }
 
     public static void findWords() throws IOException {
-        WordList.getWords();
+        WordList2.getWords();
         File file = new File("src/main/java/wordlehelper/allowed_words_temp");
         FileWriter writer = new FileWriter(file);
         
-        for (String word : WordList.answerList) {
-            if (!WordList.guessList.contains(word)) {
+        for (String word : WordList2.answerList) {
+            if (!WordList2.guessList.contains(word)) {
                 writer.write('\"' + word + '\"'+ ", ");
             }
         }
