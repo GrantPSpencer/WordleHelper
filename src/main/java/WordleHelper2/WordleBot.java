@@ -24,53 +24,63 @@ public class WordleBot implements Runnable {
         }
     }
     private LinkedList<String> possibleWords;
+    private LinkedList<String> unusedWords;
     private LinkedList<String> guessList;
     private final int LENGTH = 5;
 
     public WordleBot() throws FileNotFoundException {
-        
+        // this.possibleWords = WordList.guessList();
+        // this.unusedWords = WordList
     }
 
    public int playGame(Game game) throws FileNotFoundException {
        this.possibleWords = WordList.guessList();
+       this.unusedWords = WordList.guessList();
         String maxString = "raise";
-       int[] responses = game.guess(maxString);
-    //    this.possibleWords = filterByGuess("raise", responses);
+        int[] responses = game.guess(maxString);
+        // System.out.println("Guessed: " +  maxString);
+        // this.possibleWords = filterByGuess("raise", responses);
         int guessCount = 1;
 
        HashMap<String, Double> avgScoreMap = new HashMap<>();
+
        while (!game.gameOver) {
+            // this.possibleWords = filterByGuess(maxString, responses);
             this.possibleWords = filterByGuess(maxString, responses);
+            // System.out.println(this.possibleWords.size());
             avgScoreMap.clear();
-            for (int i = 0; i < this.possibleWords.size(); i++) {
+            for (int i = 0; i < this.unusedWords.size(); i++) {
                 double sum = 0;
-                String wordI = this.possibleWords.get(i);
-                if (game.usedWords.contains(wordI)) {
-                    continue;
-                }
+                String unusedWord = this.unusedWords.get(i);
+   
                 for (int j = 0; j < this.possibleWords.size(); j++) {
-                    String wordJ = this.possibleWords.get(j);
-                    if (wordI.equals(wordJ)) {
-                        continue;
-                    }
-                    sum += getBits(wordI, wordJ);
+                    String possibleWord = this.possibleWords.get(j);
+                    sum += getBits(unusedWord, possibleWord);
                 }
-                //had sum/4 before, not sure why
-                avgScoreMap.put(wordI, sum/this.possibleWords.size()-1);
-                System.out.print('\r' +""+i + "/" + (this.possibleWords.size() - game.usedWords.size()));
+                
+                avgScoreMap.put(unusedWord, sum);
+                // System.out.print('\r' +""+i + "/" + (this.possibleWords.size() - game.usedWords.size()));
            }
 
             Double max = -Double.MAX_VALUE;
-            
+            Double newScore;
             for (Map.Entry entry : avgScoreMap.entrySet()) {
-                if (max < (Double) entry.getValue()) {
-                    max = (Double) entry.getValue();
+                if (this.possibleWords.contains(entry.getKey())) {
+                    newScore = (Double)entry.getValue() + (1/this.possibleWords.size())*4;
+                } else {
+                    newScore = (Double) entry.getValue();
+                }
+                
+                if (max < newScore) {
+                    max = newScore;
                     maxString = (String) entry.getKey();
                 }
             }
             guessCount++;
             // System.out.println("Guessed: " + maxString);
             responses = game.guess(maxString);
+            this.unusedWords.remove(maxString);
+            
             
            
        }
@@ -81,10 +91,68 @@ public class WordleBot implements Runnable {
    }
 
 
-    private double getBits(String wordI, String wordJ) {
 
-        int[] responses = judgeGuessToAnswer(wordJ, wordI);
-        LinkedList<String> newList = this.filterByGuess(wordJ, responses);
+   public int playHardmode(Game game) throws FileNotFoundException {
+    this.possibleWords = WordList.guessList();
+    this.unusedWords = WordList.guessList();
+     String maxString = "raise";
+     int[] responses = game.guess(maxString);
+     // System.out.println("Guessed: " +  maxString);
+     // this.possibleWords = filterByGuess("raise", responses);
+     int guessCount = 1;
+
+    HashMap<String, Double> avgScoreMap = new HashMap<>();
+
+    while (!game.gameOver) {
+         // this.possibleWords = filterByGuess(maxString, responses);
+         this.possibleWords = filterByGuess(maxString, responses);
+         // System.out.println(this.possibleWords.size());
+         avgScoreMap.clear();
+         for (int i = 0; i < this.possibleWords.size(); i++) {
+             double sum = 0;
+             String guessWord = this.possibleWords.get(i);
+             for (int j = 0; j < this.possibleWords.size(); j++) {
+                 String answerWord = this.possibleWords.get(j);
+                 sum += getBits(guessWord, answerWord);
+             }
+             
+             avgScoreMap.put(guessWord, sum);
+             // System.out.print('\r' +""+i + "/" + (this.possibleWords.size() - game.usedWords.size()));
+        }
+
+         Double max = -Double.MAX_VALUE;
+         Double newScore;
+         for (Map.Entry entry : avgScoreMap.entrySet()) {
+             if (this.possibleWords.contains(entry.getKey())) {
+                 newScore = (Double)entry.getValue() + (1/this.possibleWords.size())*4;
+             } else {
+                 newScore = (Double) entry.getValue();
+             }
+             
+             if (max < newScore) {
+                 max = newScore;
+                 maxString = (String) entry.getKey();
+             }
+         }
+         guessCount++;
+         // System.out.println("Guessed: " + maxString);
+         responses = game.guess(maxString);
+         
+         
+         
+        
+    }
+    if (!game.gameWon) {
+        guessCount++;
+    }
+    return guessCount;
+}
+
+
+    private double getBits(String guessWord, String answerWord) {
+
+        int[] responses = judgeGuessToAnswer(guessWord, answerWord);
+        LinkedList<String> newList = this.filterByGuess(guessWord, responses);
         double probability = ((double) newList.size()) / ((double) this.possibleWords.size());
 
         double bits = Math.log(1/probability) / Math.log(2);
@@ -201,7 +269,7 @@ public class WordleBot implements Runnable {
 
     public static void main(String[] args) throws FileNotFoundException {
         WordleBot bot = new WordleBot();
-        bot.playGame(new Game("paper"));
+        bot.playGame(new Game("sissy"));
     }
 
 

@@ -1,0 +1,7 @@
+Sum is: 36
+Length is: 2309
+Average performance is: 4.0
+Score Distribution is: 
+3: 2
+4: 5
+5: 2

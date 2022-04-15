@@ -193,8 +193,8 @@ public class Game {
 
 
     public static void main(String[] args) {
-        System.out.println("word is: abaca");
-        Game game = new Game("abaca");
+        // System.out.println("word is: abaca");
+        Game game = new Game("sissy");
 
         // Scanner input = new Scanner(System.in);
         // while (game.remainingGuesses > 0) {
@@ -202,54 +202,57 @@ public class Game {
         //     String inputString = input.nextLine();
         //     game.guess(inputString);
         // }
-        boolean gameWon = game.guess("xaxax");
+        // boolean gameWon = game.guess("xaxax");
 
-        Scanner scanner = new Scanner(System.in);
-        String line = scanner.nextLine();
-        while (line != null) {
-            game.guess(line);
-            line = scanner.nextLine();
-        }
-        HashMap<String, Double> avgScoreMap = new HashMap<>();
-        // while (gameWon == false) {
-        //     avgScoreMap.clear();
-        //     for (int i = 0; i < game.possibleWords.size(); i++) {
-        //         double sum = 0;
-        //         for (int j = 0; j < game.possibleWords.size(); j++) {
-        //             if (i == j) {
-        //                 continue;
-        //             }
-        //             SimpleGame simpleGame = new SimpleGame(game.possibleWords.get(j));
-        //             sum += simpleGame.getBits(game.possibleWords.get(i), game.possibleWords);
-        //         }
-        //         avgScoreMap.put(game.possibleWords.get(i), sum/4);
-        //     }
-
-        //     // System.out.println(avgScoreMap.size());
-        //     Double max = -Double.MAX_VALUE;
-        //     String maxString = "";
-        //     for (Map.Entry entry : avgScoreMap.entrySet()) {
-        //         if (max < (Double) entry.getValue()) {
-        //             max = (Double) entry.getValue();
-        //             maxString = (String) entry.getKey();
-        //         }
-        //     }
-
-        //     // System.out.println("Expected bits: " + max); 
-        //     gameWon = game.guess(maxString);
+        // Scanner scanner = new Scanner(System.in);
+        // String line = scanner.nextLine();
+        // while (line != null) {
+        //     game.guess(line);
+        //     line = scanner.nextLine();
         // }
-        // if (gameWon) {
+        HashMap<String, Double> avgScoreMap = new HashMap<>();
+        boolean gameWon = game.guess("raise");
+        while (gameWon == false) {
+            avgScoreMap.clear();
+            for (int i = 0; i < game.possibleWords.size(); i++) {
+                double sum = 0;
+                for (int j = 0; j < game.possibleWords.size(); j++) {
+                    // if (i == j) {
+                    //     continue;
+                    // }
+                    SimpleGame simpleGame = new SimpleGame(game.possibleWords.get(j));
+                    sum += simpleGame.getBits(game.possibleWords.get(i), game.possibleWords);
+                }
+                avgScoreMap.put(game.possibleWords.get(i), sum);
+            }
+
+            // System.out.println(avgScoreMap.size());
+            Double max = -Double.MAX_VALUE;
+            String maxString = "";
+            for (Map.Entry entry : avgScoreMap.entrySet()) {
+                if (max < (Double) entry.getValue()) {
+                    max = (Double) entry.getValue();
+                    maxString = (String) entry.getKey();
+                }
+            }
+
+            // System.out.println("Expected bits: " + max); 
+            System.out.println("Guessed: " + maxString);
+            gameWon = game.guess(maxString);
+            System.out.println("Size is: " + game.possibleWords.size());
+        }
+        if (gameWon) {
             
-        //     if (game.remainingGuesses == 4) {
-        //         System.out.println("Game won in " + (5 - game.remainingGuesses) + " guess");
-        //     } else {
-        //         System.out.println("Game won in " + (5 - game.remainingGuesses) + " guesses");
-        //     }
+            if (game.remainingGuesses == 4) {
+                System.out.println("Game won in " + (6 - game.remainingGuesses) + " guess");
+            } else {
+                System.out.println("Game won in " + (6 - game.remainingGuesses) + " guesses");
+            }
 
                 
-        // } else {
-        //     System.out.println("Game lost");
-        // }
+        } else {
+            System.out.println("Game lost");
+        }
         
 
             

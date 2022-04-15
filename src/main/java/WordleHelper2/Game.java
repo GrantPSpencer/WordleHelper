@@ -128,7 +128,7 @@ public class Game {
                         break;
             }
         }
-        System.out.print("\n");
+        System.out.print(" " + guess + "\n");
         return response;
     }
 

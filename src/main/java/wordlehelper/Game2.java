@@ -195,7 +195,7 @@ public class Game2 {
 
 
     public static void main(String[] args) throws FileNotFoundException {
-        Game2 game2 = new Game2("humph");
+        Game2 game2 = new Game2("sissy");
 
         // Scanner input = new Scanner(System.in);
         // while (game2.remainingGuesses > 0) {
@@ -203,7 +203,7 @@ public class Game2 {
         //     String inputString = input.nextLine();
         //     game2.guess(inputString);
         // }
-        boolean gameWon = game2.guess("stare");
+        boolean gameWon = game2.guess("raise");
 
         // Scanner scanner = new Scanner(System.in);
         // String line = scanner.nextLine();

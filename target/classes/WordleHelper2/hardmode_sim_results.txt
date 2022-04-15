@@ -1,0 +1,16 @@
+Sum is: 9212
+Length is: 2309
+Average performance is: 3.9896058899956692
+Score Distribution is: 
+
+1: 1
+2: 58
+3: 651
+4: 1050
+5: 402
+6: 97
+7: 50
+
+Started at: Thu Apr 14 17:44:14 PDT 2022
+Finished at: Thu Apr 14 18:25:30 PDT 2022
+Time to completion: 00:41:16:244
