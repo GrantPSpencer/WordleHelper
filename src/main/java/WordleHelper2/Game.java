@@ -62,7 +62,8 @@ public class Game {
             for (int i = 0; i < 5; i++) {
                 System.out.print(GREEN_SQUARE);
             }
-            System.out.print("\n");
+            // System.out.print("\n");
+            System.out.println(" " + guess);
             // System.out.println("Game won with guess: " + guess + ", after " + (6-remainingGuesses) + " guesses");
             return new int[] {1};
         }

@@ -8,21 +8,12 @@ import java.util.Map;
 
 // import java.util.LinkedList;
 
-public class WordleBot implements Runnable {
+public class WordleBot {
     // LinkedList<String> guessList;
     // LinkedList<String> answerList;
     // int listLength;
 
-    @Override
-    public void run() {
-        System.out.println("test run");
-        try {
-            guessList = WordList.guessList();
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
+
     private LinkedList<String> possibleWords;
     private LinkedList<String> unusedWords;
     private LinkedList<String> guessList;
@@ -31,11 +22,13 @@ public class WordleBot implements Runnable {
     public WordleBot() throws FileNotFoundException {
         // this.possibleWords = WordList.guessList();
         // this.unusedWords = WordList
+
     }
 
    public int playGame(Game game) throws FileNotFoundException {
-       this.possibleWords = WordList.guessList();
-       this.unusedWords = WordList.guessList();
+        System.out.println("normal mode called");
+        this.possibleWords = WordList.guessList();
+        this.unusedWords = WordList.guessList();
         String maxString = "raise";
         int[] responses = game.guess(maxString);
         // System.out.println("Guessed: " +  maxString);
@@ -90,63 +83,167 @@ public class WordleBot implements Runnable {
        return guessCount;
    }
 
+   public double getActualBits(int prevSize, int currentSize) {
+    
+    double probability = ((double) currentSize) / ((double) prevSize);
+
+    double bits = Math.log(1/probability) / Math.log(2);
+
+    return bits;
+   }
 
 
-   public int playHardmode(Game game) throws FileNotFoundException {
-    this.possibleWords = WordList.guessList();
-    this.unusedWords = WordList.guessList();
-     String maxString = "raise";
-     int[] responses = game.guess(maxString);
-     // System.out.println("Guessed: " +  maxString);
-     // this.possibleWords = filterByGuess("raise", responses);
-     int guessCount = 1;
+    public int playHardmode(Game game) throws FileNotFoundException {
+        System.out.println("hardmode called");
+        this.possibleWords = WordList.guessList();
+        this.unusedWords = WordList.guessList();
+        String maxString = "raise";
+        int[] responses = game.guess(maxString);
+        // System.out.println("Guessed: " +  maxString);
+        // this.possibleWords = filterByGuess("raise", responses);
+        int guessCount = 1;
 
-    HashMap<String, Double> avgScoreMap = new HashMap<>();
 
-    while (!game.gameOver) {
-         // this.possibleWords = filterByGuess(maxString, responses);
-         this.possibleWords = filterByGuess(maxString, responses);
-         // System.out.println(this.possibleWords.size());
-         avgScoreMap.clear();
-         for (int i = 0; i < this.possibleWords.size(); i++) {
-             double sum = 0;
-             String guessWord = this.possibleWords.get(i);
-             for (int j = 0; j < this.possibleWords.size(); j++) {
-                 String answerWord = this.possibleWords.get(j);
-                 sum += getBits(guessWord, answerWord);
-             }
-             
-             avgScoreMap.put(guessWord, sum);
-             // System.out.print('\r' +""+i + "/" + (this.possibleWords.size() - game.usedWords.size()));
+        HashMap<String, Double> avgScoreMap = new HashMap<>();
+
+        while (!game.gameOver) {
+            // this.possibleWords = filterByGuess(maxString, responses);
+            this.possibleWords = filterByGuess(maxString, responses);
+            // System.out.println(this.possibleWords.size());
+            avgScoreMap.clear();
+            for (int i = 0; i < this.possibleWords.size(); i++) {
+                double sum = 0;
+                String guessWord = this.possibleWords.get(i);
+                for (int j = 0; j < this.possibleWords.size(); j++) {
+                    String answerWord = this.possibleWords.get(j);
+                    sum += getBits(guessWord, answerWord);
+                }
+                
+                avgScoreMap.put(guessWord, sum);
+                // System.out.print('\r' +""+i + "/" + (this.possibleWords.size() - game.usedWords.size()));
+            }
+
+            Double max = -Double.MAX_VALUE;
+            Double newScore;
+            for (Map.Entry entry : avgScoreMap.entrySet()) {
+                if (this.possibleWords.contains(entry.getKey())) {
+                    newScore = (Double)entry.getValue() + (1/this.possibleWords.size())*4;
+                } else {
+                    newScore = (Double) entry.getValue();
+                }
+                
+                if (max < newScore) {
+                    max = newScore;
+                    maxString = (String) entry.getKey();
+                }
+            }
+            guessCount++;
+            // System.out.println("Guessed: " + maxString);
+            responses = game.guess(maxString);
+            
+            
+            
+            
         }
+        if (!game.gameWon) {
+            guessCount++;
+        }
+        return guessCount;
+    }
 
-         Double max = -Double.MAX_VALUE;
-         Double newScore;
-         for (Map.Entry entry : avgScoreMap.entrySet()) {
-             if (this.possibleWords.contains(entry.getKey())) {
-                 newScore = (Double)entry.getValue() + (1/this.possibleWords.size())*4;
-             } else {
-                 newScore = (Double) entry.getValue();
-             }
-             
-             if (max < newScore) {
-                 max = newScore;
-                 maxString = (String) entry.getKey();
-             }
-         }
-         guessCount++;
-         // System.out.println("Guessed: " + maxString);
-         responses = game.guess(maxString);
-         
-         
-         
+    public HashMap<String, String[]> analyzePerformance(Game game) throws FileNotFoundException {
+        System.out.println("analyzer called");
+
+        HashMap<String, String[]> responseMap = new HashMap<>();
+        HashMap<String, Double> avgScoreMap = new HashMap<>();
+
+        this.possibleWords = WordList.guessList();
+        this.unusedWords = WordList.guessList();
+        String maxString = "raise";
+        int[] responses = game.guess(maxString);
+        int guessCount = 1;
+        int previousListSize = this.possibleWords.size();
+        // this.possibleWords = filterByGuess("raise", responses);
+
+        double max = 5.876;
+        double actualBits = this.getActualBits(previousListSize, this.possibleWords.size());
+        double expectedBits = max;
+        String guessNumber = "Guess" + guessCount;
+        responseMap.put("Guess1", new String[] {maxString, String.valueOf(actualBits), String.valueOf(expectedBits)});
+
+
         
+
+
+
+       while (!game.gameOver) {
+            guessNumber = "Guess" + guessCount;
+            if (guessCount > 1) {
+
+                if(this.possibleWords.contains(maxString))  {
+                    max = max - (4/this.possibleWords.size());
+                    System.out.println("probablity of being answer*4 = " +(4/this.possibleWords.size()));
+                }
+
+                expectedBits = (max/(this.possibleWords.size()));
+            } 
+
+            previousListSize = this.possibleWords.size();
+            this.possibleWords = filterByGuess(maxString, responses);
+            actualBits = this.getActualBits(previousListSize, this.possibleWords.size());
+
+            responseMap.put(guessNumber, new String[] {maxString, String.valueOf(actualBits), String.valueOf(expectedBits)});
+
+            avgScoreMap.clear();
+            for (int i = 0; i < this.unusedWords.size(); i++) {
+                double sum = 0;
+                String unusedWord = this.unusedWords.get(i);
+   
+                for (int j = 0; j < this.possibleWords.size(); j++) {
+                    String possibleWord = this.possibleWords.get(j);
+                    sum += getBits(unusedWord, possibleWord);
+                }
+                
+                avgScoreMap.put(unusedWord, sum);
+                // System.out.print('\r' +""+i + "/" + (this.possibleWords.size() - game.usedWords.size()));
+           }
+
+            max = -Double.MAX_VALUE;
+            Double newScore;
+            for (Map.Entry entry : avgScoreMap.entrySet()) {
+                if (this.possibleWords.contains(entry.getKey())) {
+                    newScore = (Double)entry.getValue() + (4/this.possibleWords.size());
+                } else {
+                    newScore = (Double) entry.getValue();
+                }
+                if (max < newScore) {
+                    max = newScore;
+                    maxString = (String) entry.getKey();
+                }
+
+            }
+            guessCount++;
+            responses = game.guess(maxString);
+            this.unusedWords.remove(maxString);
+            
+            
+           
+       }
+       if (!game.gameWon) {
+           guessCount++;
+       }
+       
+       if (game.gameWon) {
+        //    System.out.println("Probablity of winning was: " + (1/this.possibleWords.size()));
+        responseMap.put("answer", new String[] {maxString});
+       }
+
+       responseMap.put("guessCount",new String[] {String.valueOf(guessCount)});
+       return responseMap;
+        
+
     }
-    if (!game.gameWon) {
-        guessCount++;
-    }
-    return guessCount;
-}
+
 
 
     private double getBits(String guessWord, String answerWord) {
