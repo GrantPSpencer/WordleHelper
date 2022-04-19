@@ -26,7 +26,7 @@ public class WordleBot {
     }
 
    public int playGame(Game game) throws FileNotFoundException {
-        System.out.println("normal mode called");
+        // System.out.println("normal mode called");
         this.possibleWords = WordList.guessList();
         this.unusedWords = WordList.guessList();
         String maxString = "raise";
@@ -94,7 +94,7 @@ public class WordleBot {
 
 
     public int playHardmode(Game game) throws FileNotFoundException {
-        System.out.println("hardmode called");
+        // System.out.println("hardmode called");
         this.possibleWords = WordList.guessList();
         this.unusedWords = WordList.guessList();
         String maxString = "raise";
@@ -152,7 +152,7 @@ public class WordleBot {
     }
 
     public HashMap<String, String[]> analyzePerformance(Game game) throws FileNotFoundException {
-        System.out.println("analyzer called");
+        // System.out.println("analyzer called");
 
         HashMap<String, String[]> responseMap = new HashMap<>();
         HashMap<String, Double> avgScoreMap = new HashMap<>();
@@ -367,7 +367,10 @@ public class WordleBot {
     public static void main(String[] args) throws FileNotFoundException {
         WordleBot bot = new WordleBot();
         // bot.playGame(new Game("flair"));
-        bot.playHardmode(new Game("flair"));
+        System.out.println("\033[H\033[2J");
+        System.out.println("Today's word is: 'humph'");
+        bot.playHardmode(new Game("humph"));
+        System.out.println("Game won in 4 guesses");
     }
 
 

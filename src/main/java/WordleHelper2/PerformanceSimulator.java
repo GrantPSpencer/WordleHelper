@@ -44,7 +44,6 @@ public class PerformanceSimulator {
             sum += guessCount;
             scoreMap.put(guessCount, scoreMap.getOrDefault(guessCount, 0)+1);
             System.out.println("Average is: " + (double)sum/(double)i);   
-            // Thread.sleep(500);
             System.out.println("\033[H\033[2J");
         }
         
@@ -63,25 +62,25 @@ public class PerformanceSimulator {
         long seconds = TimeUnit.MILLISECONDS.toSeconds(timeInMilliseconds - TimeUnit.HOURS.toMillis(hours) - TimeUnit.MINUTES.toMillis(minutes));
         long milliseconds = timeInMilliseconds - TimeUnit.HOURS.toMillis(hours) - TimeUnit.MINUTES.toMillis(minutes) - TimeUnit.SECONDS.toMillis(seconds);
 
-        FileWriter writer = new FileWriter(file);
-        writer.write("Sum is: " + sum + "\n");
-        writer.write("Length is: " + WordList.answerList.length + "\n");
-        writer.write("Average performance is: " + ((double)sum / (double)i)+"\n");
-        writer.write("Score Distribution is: \n");
-        writer.write("\n");
-        for (Map.Entry entry : scoreMap.entrySet()) {
-            writer.write(entry.getKey() + ": " + entry.getValue() + "\n");
-        }
+        // FileWriter writer = new FileWriter(file);
+        // writer.write("Sum is: " + sum + "\n");
+        // writer.write("Length is: " + WordList.answerList.length + "\n");
+        // writer.write("Average performance is: " + ((double)sum / (double)i)+"\n");
+        // writer.write("Score Distribution is: \n");
+        // writer.write("\n");
+        // for (Map.Entry entry : scoreMap.entrySet()) {
+        //     writer.write(entry.getKey() + ": " + entry.getValue() + "\n");
+        // }
 
-        writer.write("\n");
+        // writer.write("\n");
         
-        writer.write("Started at: " + new Date(startTime) + "\n");
-        writer.write("Finished at: " + new Date(endTime)+"\n");
-        writer.write("Time to completion: " +String.format("%02d:%02d:%02d:%d", hours, minutes, seconds, milliseconds)+"\n");
+        // writer.write("Started at: " + new Date(startTime) + "\n");
+        // writer.write("Finished at: " + new Date(endTime)+"\n");
+        // writer.write("Time to completion: " +String.format("%02d:%02d:%02d:%d", hours, minutes, seconds, milliseconds)+"\n");
 
         
-        writer.flush();
-        writer.close();
+        // writer.flush();
+        // writer.close();
 
     }
 
