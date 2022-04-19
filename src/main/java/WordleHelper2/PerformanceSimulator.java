@@ -19,7 +19,7 @@ public class PerformanceSimulator {
 
         long startTime = System.currentTimeMillis();
 
-        boolean hardmode = false;
+        boolean hardmode = true;
 
         int sum = 0;
         HashMap<Integer, Integer> scoreMap = new HashMap<>();
@@ -45,7 +45,7 @@ public class PerformanceSimulator {
             scoreMap.put(guessCount, scoreMap.getOrDefault(guessCount, 0)+1);
             System.out.println("Average is: " + (double)sum/(double)i);   
             // Thread.sleep(500);
-            // System.out.println("\033[H\033[2J");
+            System.out.println("\033[H\033[2J");
         }
         
         

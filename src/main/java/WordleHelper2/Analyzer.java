@@ -16,10 +16,17 @@ public class Analyzer {
         String answer = scanner.nextLine().toLowerCase();
         this.game = new Game(answer);
     }
-    public static void main(String[] args) throws FileNotFoundException {
-        // Analyzer analyzer = new Analyzer();
+
+    public HashMap<String, String[]> getBotPerformance() throws FileNotFoundException {
         WordleBot bot = new WordleBot();
-        HashMap<String, String[]> responseMap = bot.analyzePerformance(new Game("props"));
+        return bot.analyzePerformance(new Game("props"));
+    }
+
+
+    public static void main(String[] args) throws FileNotFoundException {
+        Analyzer analyzer = new Analyzer();
+        WordleBot bot = new WordleBot();
+        HashMap<String, String[]> responseMap = bot.analyzePerformance(new Game("flair"));
         System.out.println("The computer took " + responseMap.get("guessCount")[0] + " guessses");
         String guessNumber;
         int i = 1;
@@ -37,7 +44,9 @@ public class Analyzer {
             i++;
         }
         if (responseMap.containsKey("answer")) {
-            System.out.println("The computer correclty guessed " + "'" + responseMap.get("answer")[0] + "'" + " on turn " + i);
+            System.out.println("The computer correctly guessed " + "'" + responseMap.get("answer")[0] + "'" + " on turn " + i);
         }
     }
+
+
 }

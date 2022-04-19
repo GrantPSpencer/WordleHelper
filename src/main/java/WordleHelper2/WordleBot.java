@@ -366,7 +366,8 @@ public class WordleBot {
 
     public static void main(String[] args) throws FileNotFoundException {
         WordleBot bot = new WordleBot();
-        bot.playGame(new Game("sissy"));
+        // bot.playGame(new Game("flair"));
+        bot.playHardmode(new Game("flair"));
     }
 
 
