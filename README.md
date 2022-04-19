@@ -1,4 +1,4 @@
-# wordlehelper
+# WordleHelper
  
 Building a program that helps you analyze your wordle performance. Uses information theory to determine the best word to guess. 
 
@@ -19,7 +19,10 @@ Current Algorithm's Performance (on hardmode):
 
 Example Performance on the word "humph":
 </br>
+<img width="335" src = "https://user-images.githubusercontent.com/80296166/163917558-6683e9b9-776a-4a30-96b4-65a161c8970e.jpg">
 <img width="290" alt="Screen Shot 2022-03-03 at 3 36 21 PM" src="https://user-images.githubusercontent.com/80296166/156674188-91dde57d-8c2c-4384-919c-34f22907a4ed.png">
+
 </br>
+
 
 
